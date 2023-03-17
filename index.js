@@ -32,6 +32,8 @@ const todo = {
 todoItems.push(todo);
 console.log(todoItems);
 
+localStorage.setItem('todoItemsRef', JSON.stringify(todoItems));
+
 function renderTodo(todo) {
     const list = document.querySelector('.js-todo-list');
     const isChecked = todo.checked ? 'done': '';
@@ -150,3 +152,18 @@ function renderTodo(todo) {
     }
 }
 
+if (todo.deleted) {
+    item.remove();
+    if (todoItems.length === 0) list.innerHTML = '';
+    return
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const ref = localStorage.getItem('todoItemsRef');
+    if (ref) {
+        todoItems = JSON.parse(ref);
+        todoItems.forEach(t => {
+            renderTodo(t);
+        });
+    }
+});
